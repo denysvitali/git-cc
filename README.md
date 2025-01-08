@@ -2,7 +2,9 @@
 
 A conventional commit tool for git.
 
-![DEMO](./docs/demo.svg)
+<a href="https://asciinema.org/a/R8xrOATDrnmO2hDNrdhGGllgH" target="_blank">
+    <img src="./docs/demo.svg" height="500" alt="DEMO"/>
+</a>
 
 
 ## Installation
