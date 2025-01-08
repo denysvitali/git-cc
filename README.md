@@ -3,7 +3,7 @@
 A conventional commit tool for git.
 
 <a href="https://asciinema.org/a/R8xrOATDrnmO2hDNrdhGGllgH" target="_blank">
-    <img src="./docs/demo.svg" height="500" alt="DEMO"/>
+    <img src="./docs/demo.svg" alt="DEMO"/>
 </a>
 
 
