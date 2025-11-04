@@ -13,14 +13,10 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
       - darwin
     goarch:
       - amd64
       - arm64
-    ignore:
-      - goos: windows
-        goarch: arm64
     binary: git-cc
     ldflags:
       - -s -w
@@ -42,63 +38,13 @@ archives:
       - tar.gz
       - zip
 
-# Homebrew formula
-# Note: This will skip publishing until you have a proper tap repository
-brews:
-  - name: git-cc
-    homepage: "https://github.com/denysvitali/git-cc"
-    description: "A conventional commit tool for git"
-    license: MIT
-    test: |
-      system "#{bin}/git-cc --version"
-    # Skip publishing until tap is set up
-    skip_upload: true
-
-# Scoop for Windows
-# Note: Skip publishing until bucket repository is set up
-scoops:
-  - name: git-cc
-    homepage: "https://github.com/denysvitali/git-cc"
-    description: "A conventional commit tool for git"
-    license: MIT
-    persist:
-      - git-cc.exe
-    skip_upload: true
-
-# Snap for Linux
-# Note: Skip publishing until snap is registered and configured
-snapcrafts:
-  - summary: A conventional commit tool for git
-    description: |
-      git-cc is a terminal user interface for creating conventional commits
-      with git. It provides an interactive TUI for selecting commit types,
-      adding optional scopes, and writing commit messages following the
-      conventional commits specification.
-    license: MIT
-    grade: stable
-    confinement: strict
-    apps:
-      git-cc:
-        plugs: ["home", "network"]
-    skip_publish: true
 
 # Docker images
-# Note: This should work if GHCR permissions are set up correctly
 dockers:
   - image_templates:
       - "ghcr.io/denysvitali/git-cc:{{ .Version }}"
       - "ghcr.io/denysvitali/git-cc:latest"
-      - "ghcr.io/denysvitali/git-cc:v{{ .Major }}"
     dockerfile: Dockerfile
-    use: buildx
-    build_flag_templates:
-      - "--pull"
-      - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.title={{.ProjectName}}"
-      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.version={{.Version}}"
-      - "--label=org.opencontainers.image.source={{.GitURL}}"
-      - "--platform={{.Platform}}"
 
 checksum:
   name_template: 'checksums.txt'
