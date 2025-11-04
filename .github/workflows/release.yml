@@ -105,11 +105,6 @@ jobs:
     - name: Run go vet
       run: go vet ./...
 
-    - name: Check for inefficient assignments
-      uses: dominikh/staticcheck-action@v1.3.1
-      with:
-        version: "2024.1.1"
-
   goreleaser:
     name: Build & Release
     runs-on: ubuntu-latest

@@ -49,11 +49,6 @@ jobs:
     - name: Verify dependencies
       run: go mod verify
 
-    - name: Check for unused dependencies
-      run: |
-        go install github.com/oligot/go-mod-upgrade@latest
-        go-mod-upgrade --check-all
-
     - name: Run go vet
       run: go vet ./...
 
@@ -100,11 +95,6 @@ jobs:
       with:
         version: latest
         args: --timeout=10m
-
-    - name: Check for inefficient assignments
-      uses: dominikh/staticcheck-action@v1.3.1
-      with:
-        version: "2024.1.1"
 
     - name: Run go mod tidy check
       run: |

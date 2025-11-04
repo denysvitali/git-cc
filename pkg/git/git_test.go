@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/config"
 )
 
 func TestParseCommitError(t *testing.T) {
@@ -96,13 +95,16 @@ func TestCommitSuccess(t *testing.T) {
 		t.Fatalf("failed to init git repo: %v", err)
 	}
 
-	// Configure git user
-	_, err = repo.CreateRemote(&config.RemoteConfig{
-		Name: "origin",
-		URLs: []string{"https://github.com/test/test.git"},
-	})
+	// Configure git user using git commands
+	cfg, err := repo.Config()
 	if err != nil {
-		t.Fatalf("failed to create remote: %v", err)
+		t.Fatalf("failed to get config: %v", err)
+	}
+	cfg.User.Name = "Test User"
+	cfg.User.Email = "test@example.com"
+	err = repo.SetConfig(cfg)
+	if err != nil {
+		t.Fatalf("failed to set config: %v", err)
 	}
 
 	// Create and stage a file
