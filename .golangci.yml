@@ -1,13 +1,13 @@
+# golangci-lint v2 configuration
+
 run:
   timeout: 10m
   issues-exit-code: 1
   tests: true
 
 output:
-  formats:
-    - format: colored-line-number
-      print-issued-lines: true
-      print-linter-name: true
+  print-issued-lines: true
+  print-linter-name: true
 
 linters-settings:
   shadow:
@@ -38,23 +38,17 @@ linters-settings:
       - octalLiteral
       - whyNoLint
       - wrapperFunc
+      - hugeParam
   depguard:
     rules:
       main:
-        deny:
-          # Allow all standard library packages
-          - pkg: "^std$"
-          # Allow all project packages
-          - pkg: "^github.com/denysvitali/git-cc"
-          # Allow commonly used third-party packages for this type of application
-          - pkg: "^github.com/charmbracelet/bubbletea$"
-            desc: "Bubble Tea TUI framework"
-          - pkg: "^github.com/charmbracelet/bubbles"
-            desc: "Bubble Tea component library"
-          - pkg: "^github.com/charmbracelet/lipgloss$"
-            desc: "Lipgloss styling library"
-          - pkg: "^github.com/go-git/go-git/v5"
-            desc: "Git operations library for tests"
+        allow:
+          - "$gostd"
+          - "github.com/denysvitali/git-cc"
+          - "github.com/charmbracelet/bubbletea"
+          - "github.com/charmbracelet/bubbles"
+          - "github.com/charmbracelet/lipgloss"
+          - "github.com/go-git/go-git/v5"
 
 linters:
   disable-all: true
@@ -80,7 +74,6 @@ linters:
     - nakedret
     - noctx
     - nolintlint
-    - rowserrcheck
     - revive
     - staticcheck
     - stylecheck
