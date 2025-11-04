@@ -43,6 +43,7 @@ archives:
       - zip
 
 # Homebrew formula
+# Note: This will skip publishing until you have a proper tap repository
 brews:
   - name: git-cc
     homepage: "https://github.com/denysvitali/git-cc"
@@ -50,16 +51,22 @@ brews:
     license: MIT
     test: |
       system "#{bin}/git-cc --version"
+    # Skip publishing until tap is set up
+    skip_upload: true
 
 # Scoop for Windows
+# Note: Skip publishing until bucket repository is set up
 scoops:
-  - homepage: "https://github.com/denysvitali/git-cc"
+  - name: git-cc
+    homepage: "https://github.com/denysvitali/git-cc"
     description: "A conventional commit tool for git"
     license: MIT
     persist:
       - git-cc.exe
+    skip_upload: true
 
 # Snap for Linux
+# Note: Skip publishing until snap is registered and configured
 snapcrafts:
   - summary: A conventional commit tool for git
     description: |
@@ -73,8 +80,10 @@ snapcrafts:
     apps:
       git-cc:
         plugs: ["home", "network"]
+    skip_publish: true
 
 # Docker images
+# Note: This should work if GHCR permissions are set up correctly
 dockers:
   - image_templates:
       - "ghcr.io/denysvitali/git-cc:{{ .Version }}"
