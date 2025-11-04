@@ -17,30 +17,15 @@ A terminal-based conventional commit tool for git with an interactive TUI interf
 
 ## Installation
 
-### Package Managers
-
-#### Homebrew (macOS)
-```bash
-brew tap denysvitali/homebrew-tap
-brew install git-cc
-```
-
-#### Scoop (Windows)
-```bash
-scoop bucket add denysvitali-scoop https://github.com/denysvitali/scoop-bucket
-scoop install git-cc
-```
-
-#### Snap (Linux)
-```bash
-sudo snap install git-cc
-```
-
-### Go Install
+### Go Install (Recommended)
 
 ```bash
 go install github.com/denysvitali/git-cc@latest
 ```
+
+### Pre-built Binaries
+
+Download the appropriate binary from the [Releases](https://github.com/denysvitali/git-cc/releases) page.
 
 ### Docker
 
@@ -52,9 +37,15 @@ docker pull ghcr.io/denysvitali/git-cc:latest
 docker run --rm -it -v $(pwd):/repo -w /repo ghcr.io/denysvitali/git-cc:latest
 ```
 
-### Pre-built Binaries
+### Package Managers (Coming Soon)
 
-Download the appropriate binary from the [Releases](https://github.com/denysvitali/git-cc/releases) page.
+We're working on distribution to package managers:
+
+- **Homebrew (macOS)**: `brew install git-cc`
+- **Scoop (Windows)**: `scoop install git-cc`
+- **Snap (Linux)**: `snap install git-cc`
+
+Check the [Issues](https://github.com/denysvitali/git-cc/issues) for progress or to help set up these distribution channels!
 
 ### From Source
 
