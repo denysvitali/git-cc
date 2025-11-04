@@ -44,6 +44,7 @@ dockers:
   - image_templates:
       - "ghcr.io/denysvitali/git-cc:{{ .Version }}"
       - "ghcr.io/denysvitali/git-cc:latest"
+      - "ghcr.io/denysvitali/git-cc:v{{ .Major }}"
     dockerfile: Dockerfile
 
 checksum:
