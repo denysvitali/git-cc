@@ -37,15 +37,24 @@ docker pull ghcr.io/denysvitali/git-cc:latest
 docker run --rm -it -v $(pwd):/repo -w /repo ghcr.io/denysvitali/git-cc:latest
 ```
 
-### Package Managers (Coming Soon)
+### Supported Platforms
 
-We're working on distribution to package managers:
+- **Linux**: amd64, arm64
+- **macOS**: amd64, arm64 (Apple Silicon)
 
-- **Homebrew (macOS)**: `brew install git-cc`
-- **Scoop (Windows)**: `scoop install git-cc`
-- **Snap (Linux)**: `snap install git-cc`
+### Docker
 
-Check the [Issues](https://github.com/denysvitali/git-cc/issues) for progress or to help set up these distribution channels!
+```bash
+# Pull the image
+docker pull ghcr.io/denysvitali/git-cc:latest
+
+# Run with git repository mounted
+docker run --rm -it -v $(pwd):/repo -w /repo ghcr.io/denysvitali/git-cc:latest
+```
+
+### Development
+
+We're focused on Linux and macOS support for the initial release. Windows users can use Docker or build from source if needed.
 
 ### From Source
 
