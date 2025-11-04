@@ -10,7 +10,7 @@ Interactive TUI for conventional commits.
 go install github.com/denysvitali/git-cc@latest
 ```
 
-Or download from [releases](https://github.com/denysvitali/git-cc/releases).
+Download from [releases](https://github.com/denysvitali/git-cc/releases) for Linux, macOS, and Windows.
 
 ## Usage
 
