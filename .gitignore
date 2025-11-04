@@ -1,0 +1,117 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+git-cc
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local development files
+.env
+.env.local
+.env.*.local
+
+# Distribution directories
+dist/
+build/
+bin/
+
+# Coverage files
+coverage.out
+coverage.html
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Log files
+*.log
+
+# Claude AI specific files
+.claude/
+
+# Goreleaser artifacts
+dist/
+goreleaser/
+
+# Docker build cache
+.dockerignore
+Dockerfile.goreleaser
+
+# Make temporary files
+.make.*
+
+# Go module cache
+go.sum
+
+# Security scanning results
+gosec.sarif
+gosec.json
+
+# Linting cache
+.cache/
+
+# Snap files
+*.snap
+
+# Test artifacts
+testdata/temp/
+
+# Homebrew formula temp
+homebrew/*.rb.tmp
+
+# Scoop bucket temp
+scoop/bucket/*.json.tmp
+
+# Release artifacts (will be generated and uploaded)
+*.tar.gz
+*.zip
+checksums.txt
+
+# Local build overrides
+local.mk
+Makefile.local
+
+# Editor backups
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Project-specific
+VERSION
+RELEASE_NOTES.md

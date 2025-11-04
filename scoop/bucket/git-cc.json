@@ -1,0 +1,32 @@
+{
+    "version": "{{.Version}}",
+    "description": "A conventional commit tool for git",
+    "homepage": "https://github.com/denysvitali/git-cc",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/denysvitali/git-cc/releases/download/v{{.Version}}/git-cc-{{.Version}}-windows-amd64.zip",
+            "hash": "{{.WindowsAmd64Hash}}"
+        },
+        "arm64": {
+            "url": "https://github.com/denysvitali/git-cc/releases/download/v{{.Version}}/git-cc-{{.Version}}-windows-arm64.zip",
+            "hash": "{{.WindowsArm64Hash}}"
+        }
+    },
+    "extract_dir": "",
+    "bin": "git-cc.exe",
+    "checkver": {
+        "github": "https://github.com/denysvitali/git-cc",
+        "regex": "v([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/denysvitali/git-cc/releases/download/v{{matchVersion}}/git-cc-{{matchVersion}}-windows-amd64.zip"
+            },
+            "arm64": {
+                "url": "https://github.com/denysvitali/git-cc/releases/download/v{{matchVersion}}/git-cc-{{matchVersion}}-windows-arm64.zip"
+            }
+        }
+    }
+}

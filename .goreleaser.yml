@@ -1,0 +1,133 @@
+# .goreleaser.yml
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod verify
+    - go generate ./...
+
+builds:
+  # Main CLI application builds
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    binary: git-cc
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+
+archives:
+  - name_template: >-
+      {{ .ProjectName }}-
+      {{ .Version }}-
+      {{ .Os }}-
+      {{ .Arch }}
+    files:
+      - README.md
+      - LICENSE*
+    formats:
+      - tar.gz
+      - zip
+
+# Homebrew formula
+brews:
+  - name: git-cc
+    homepage: "https://github.com/denysvitali/git-cc"
+    description: "A conventional commit tool for git"
+    license: MIT
+    test: |
+      system "#{bin}/git-cc --version"
+
+# Scoop for Windows
+scoops:
+  - homepage: "https://github.com/denysvitali/git-cc"
+    description: "A conventional commit tool for git"
+    license: MIT
+    persist:
+      - git-cc.exe
+
+# Snap for Linux
+snapcrafts:
+  - summary: A conventional commit tool for git
+    description: |
+      git-cc is a terminal user interface for creating conventional commits
+      with git. It provides an interactive TUI for selecting commit types,
+      adding optional scopes, and writing commit messages following the
+      conventional commits specification.
+    license: MIT
+    grade: stable
+    confinement: strict
+    apps:
+      git-cc:
+        plugs: ["home", "network"]
+
+# Docker images
+dockers:
+  - image_templates:
+      - "ghcr.io/denysvitali/git-cc:{{ .Version }}"
+      - "ghcr.io/denysvitali/git-cc:latest"
+      - "ghcr.io/denysvitali/git-cc:v{{ .Major }}"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--platform={{.Platform}}"
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+  groups:
+    - title: Features
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: Others
+      order: 999
+
+# GitHub release
+release:
+  github:
+    owner: denysvitali
+    name: git-cc
+  draft: false
+  prerelease: auto
+  name_template: '{{.Version}}'
+
+# The lines beneath this are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/use them.
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj

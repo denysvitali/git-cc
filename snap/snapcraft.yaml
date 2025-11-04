@@ -1,0 +1,36 @@
+name: git-cc
+version: git
+summary: A conventional commit tool for git
+description: |
+  git-cc is a terminal user interface for creating conventional commits with git.
+  It provides an interactive TUI for selecting commit types, adding optional scopes,
+  and writing commit messages following the conventional commits specification.
+
+grade: stable
+confinement: strict
+base: core24
+
+architectures:
+  - amd64
+  - arm64
+
+apps:
+  git-cc:
+    command: bin/git-cc
+    plugs:
+      - home
+      - network
+
+parts:
+  git-cc:
+    plugin: go
+    source: .
+    build-snaps:
+      - git-cc
+    override-build: |
+      set -eux
+      CGO_ENABLED=0 go build \
+        -ldflags="-s -w -X main.version=$SNAPCRAFT_PROJECT_VERSION" \
+        -o "$SNAPCRAFT_PART_INSTALL/bin/git-cc" .
+    stage-packages:
+      - git
