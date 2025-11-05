@@ -43,18 +43,6 @@ jobs:
     - name: Verify dependencies
       run: go mod verify
 
-    - name: Run go vet
-      run: go vet ./...
-
-    - name: Check code formatting
-      run: |
-        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
-          echo "Code is not formatted properly:"
-          gofmt -s -l .
-          exit 1
-        fi
-      shell: bash
-
     - name: Run tests
       run: go test -v -race -coverprofile=coverage.out ./...
 
@@ -83,6 +71,17 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: ${{ env.GO_VERSION }}
+
+    - name: Check code formatting
+      run: |
+        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+          echo "Code is not formatted properly:"
+          gofmt -s -l .
+          exit 1
+        fi
+
+    - name: Run go vet
+      run: go vet ./...
 
     - name: Run golangci-lint
       uses: golangci/golangci-lint-action@v6
