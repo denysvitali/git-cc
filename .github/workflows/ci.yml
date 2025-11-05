@@ -171,6 +171,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        fetch-tags: true
+
+    - name: Fetch all branches
+      run: git fetch --all
 
     - name: Run Gitleaks
       uses: gitleaks/gitleaks-action@v2
