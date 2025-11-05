@@ -25,7 +25,6 @@ build-all: ## Build all platform binaries using Goreleaser
 test: ## Run all tests
 	@echo "Running tests..."
 	go test -v -race -coverprofile=coverage.out ./...
-	go test -v -race ./...
 
 test-integration: ## Run integration tests
 	@echo "Running integration tests..."
@@ -81,10 +80,6 @@ docker-run: docker-build ## Run Docker container
 	@echo "Running Docker container..."
 	docker run --rm -it $(BINARY_NAME):$(VERSION) --version
 
-release-snapshot: ## Create a release snapshot using Goreleaser
-	@echo "Creating release snapshot..."
-	goreleaser build --snapshot --clean
-
 release-check: ## Check Goreleaser configuration
 	@echo "Checking Goreleaser configuration..."
 	goreleaser check
@@ -94,20 +89,11 @@ release-test: ## Test release process locally
 	goreleaser release --snapshot --clean --skip-publish
 	@echo "Release test complete!"
 
-release-notes: ## Generate release notes preview
-	@echo "Generating release notes..."
-	goreleaser release --snapshot --clean --skip-announce --skip-publish --skip-validate
-
 dev-setup: ## Set up development environment
 	@echo "Setting up development environment..."
 	@echo "Installing tools..."
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/goreleaser/goreleaser/v2@latest
 	@echo "Development environment setup complete!"
-
-security-scan: ## Run security scan
-	@echo "Running security scan..."
-	@command -v gosec >/dev/null 2>&1 || { echo "gosec not installed. Run: go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest"; exit 1; }
-	gosec ./...
 
 all: fmt lint test build ## Run all common development tasks
