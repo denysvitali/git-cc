@@ -136,23 +136,37 @@ func TestCommitNoChanges(t *testing.T) {
 	os.Chdir(tempDir)
 
 	// Initialize git repo
-	_, err := git.PlainInit(".", false)
+	repo, err := git.PlainInit(".", false)
 	if err != nil {
 		t.Fatalf("failed to init git repo: %v", err)
+	}
+
+	// Configure git user
+	cfg, err := repo.Config()
+	if err != nil {
+		t.Fatalf("failed to get config: %v", err)
+	}
+	cfg.User.Name = "Test User"
+	cfg.User.Email = "test@example.com"
+	err = repo.SetConfig(cfg)
+	if err != nil {
+		t.Fatalf("failed to set config: %v", err)
 	}
 
 	// Test commit with no changes
 	err = Commit("feat: test commit")
 	if err == nil {
 		t.Error("expected error for no changes")
+		return
 	}
 
 	commitErr, ok := err.(*CommitError)
 	if !ok {
-		t.Error("expected CommitError")
+		t.Errorf("expected CommitError, got %T: %v", err, err)
+		return
 	}
 
 	if commitErr.Type != ErrorTypeNoChanges {
-		t.Errorf("expected error type %v, got %v", ErrorTypeNoChanges, commitErr.Type)
+		t.Errorf("expected error type %v, got %v. Output: %q", ErrorTypeNoChanges, commitErr.Type, commitErr.Output)
 	}
 }
