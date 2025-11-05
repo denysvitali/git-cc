@@ -10,8 +10,6 @@ output:
   print-linter-name: true
 
 linters-settings:
-  shadow:
-    check-shadowing: true
   gocyclo:
     min-complexity: 20
   dupl:
@@ -104,16 +102,6 @@ issues:
     - text: "weak cryptographic primitive"
       linters:
         - gosec
-
-    # Exclude shadow checking on err variables
-    - text: "shadow: declaration of \"err\""
-      linters:
-        - govet
-
-    # Allow unused variables in certain contexts
-    - text: "unused"
-      linters:
-        - unused
 
   exclude-use-default: false
   max-issues-per-linter: 0
