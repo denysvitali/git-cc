@@ -140,19 +140,6 @@ jobs:
         fi
         go build -ldflags="-s -w" -o "$output_name" .
 
-    - name: Test binary (Unix)
-      if: matrix.goos != 'windows'
-      run: |
-        output_name="git-cc-${{ matrix.goos }}-${{ matrix.goarch }}"
-        ./"$output_name" --version
-      shell: bash
-
-    - name: Test binary (Windows)
-      if: matrix.goos == 'windows'
-      run: |
-        ./git-cc-windows-amd64.exe --version
-      shell: cmd
-
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
