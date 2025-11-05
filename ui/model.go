@@ -9,17 +9,18 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
 	"github.com/denysvitali/git-cc/pkg/git"
 )
 
 type item struct {
-	type_       string
+	commitType  string
 	description string
 }
 
-func (i item) Title() string       { return i.type_ }
+func (i item) Title() string       { return i.commitType }
 func (i item) Description() string { return i.description }
-func (i item) FilterValue() string { return i.type_ + " " + i.description }
+func (i item) FilterValue() string { return i.commitType + " " + i.description }
 
 type Model struct {
 	list      list.Model
@@ -76,7 +77,7 @@ func (i itemListDelegate) Render(w io.Writer, m list.Model, index int, li list.I
 	} else {
 		_, _ = io.WriteString(w, "  ")
 	}
-	_, _ = io.WriteString(w, style.Render(fmt.Sprintf("%-10s %s", itm.type_, itm.description)))
+	_, _ = io.WriteString(w, style.Render(fmt.Sprintf("%-10s %s", itm.commitType, itm.description)))
 }
 
 func (i itemListDelegate) Height() int {
@@ -87,7 +88,7 @@ func (i itemListDelegate) Spacing() int {
 	return 0
 }
 
-func (i itemListDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
+func (i itemListDelegate) Update(_ tea.Msg, m *list.Model) tea.Cmd {
 	return nil
 }
 
@@ -95,16 +96,16 @@ var _ list.ItemDelegate = itemListDelegate{}
 
 func InitialModel() Model {
 	items := []list.Item{
-		item{type_: "feat", description: "A new feature"},
-		item{type_: "fix", description: "A bug fix"},
-		item{type_: "docs", description: "Documentation only changes"},
-		item{type_: "style", description: "Changes that do not affect the meaning of the code"},
-		item{type_: "refactor", description: "A code change that neither fixes a bug nor adds a feature"},
-		item{type_: "perf", description: "A code change that improves performance"},
-		item{type_: "test", description: "Adding missing tests or correcting existing tests"},
-		item{type_: "build", description: "Changes that affect the build system or external dependencies"},
-		item{type_: "ci", description: "Changes to CI configuration files and scripts"},
-		item{type_: "chore", description: "Other changes that don't modify src or test files"},
+		item{commitType: "feat", description: "A new feature"},
+		item{commitType: "fix", description: "A bug fix"},
+		item{commitType: "docs", description: "Documentation only changes"},
+		item{commitType: "style", description: "Changes that do not affect the meaning of the code"},
+		item{commitType: "refactor", description: "A code change that neither fixes a bug nor adds a feature"},
+		item{commitType: "perf", description: "A code change that improves performance"},
+		item{commitType: "test", description: "Adding missing tests or correcting existing tests"},
+		item{commitType: "build", description: "Changes that affect the build system or external dependencies"},
+		item{commitType: "ci", description: "Changes to CI configuration files and scripts"},
+		item{commitType: "chore", description: "Other changes that don't modify src or test files"},
 	}
 
 	delegate := itemListDelegate{}
@@ -226,7 +227,7 @@ func (m Model) View() string {
 			scopeStr = fmt.Sprintf("(%s)", m.scope.Value())
 		}
 		s = titleStyle.Render("Enter commit message:") + "\n"
-		s += promptStyle.Render(fmt.Sprintf("%s%s: ", selectedItem.type_, scopeStr))
+		s += promptStyle.Render(fmt.Sprintf("%s%s: ", selectedItem.commitType, scopeStr))
 		s += m.message.View()
 
 	case StepError:
@@ -249,7 +250,7 @@ func (m Model) buildCommitMessage() string {
 	if m.scope.Value() != "" {
 		scopeStr = fmt.Sprintf("(%s)", m.scope.Value())
 	}
-	return fmt.Sprintf("%s%s: %s", selectedItem.type_, scopeStr, m.message.Value())
+	return fmt.Sprintf("%s%s: %s", selectedItem.commitType, scopeStr, m.message.Value())
 }
 
 func (m Model) GetCommitResult() *git.CommitResult {
