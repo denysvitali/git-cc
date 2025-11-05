@@ -98,10 +98,5 @@ issues:
       linters:
         - gosec
 
-    # Exclude shadow checking on err variables
-    - text: "shadow: declaration of \"err\""
-      linters:
-        - govet
-
   max-issues-per-linter: 0
   max-same-issues: 0

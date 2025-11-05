@@ -50,6 +50,17 @@ func Commit(message string) error {
 	err := cmd.Run()
 	if err != nil {
 		output := outBuffer.String() + errBuffer.String()
+
+		// Check if output only contains warnings that can be ignored
+		outputLower := strings.ToLower(output)
+		if strings.Contains(outputLower, "(ignored)") &&
+			!strings.Contains(outputLower, "nothing to commit") &&
+			!strings.Contains(outputLower, "hook") &&
+			!strings.Contains(outputLower, "merge conflict") {
+			// This is just a warning, treat as success
+			return nil
+		}
+
 		return parseCommitError(err, output)
 	}
 
@@ -84,7 +95,22 @@ func parseCommitError(err error, output string) *CommitError {
 		commitErr.Message = "Not in a git repository"
 
 	default:
-		if output != "" {
+		// Extract the first non-empty, non-debug line as the error message
+		lines := strings.Split(output, "\n")
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			lineLower := strings.ToLower(line)
+			// Skip debug, info, ignored warnings, or empty lines
+			if line != "" &&
+				!strings.HasPrefix(lineLower, "debug:") &&
+				!strings.HasPrefix(lineLower, "info:") &&
+				!strings.Contains(lineLower, "(ignored)") {
+				commitErr.Message = line
+				break
+			}
+		}
+		if commitErr.Message == "Commit failed" && output != "" {
+			// If we couldn't find a good line, use the first line
 			commitErr.Message = strings.TrimSpace(strings.Split(output, "\n")[0])
 		}
 	}

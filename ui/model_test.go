@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+
 	"github.com/denysvitali/git-cc/pkg/git"
 )
 
@@ -161,7 +162,7 @@ func TestBuildCommitMessage(t *testing.T) {
 
 	// Set up selected item
 	items := []list.Item{
-		item{type_: "feat", description: "A new feature"},
+		item{commitType: "feat", description: "A new feature"},
 	}
 	model.list.SetItems(items)
 	model.list.Select(0)
@@ -204,7 +205,7 @@ func TestModelView(t *testing.T) {
 	model.step = StepMessage
 	// Set up selected item for proper display
 	items := []list.Item{
-		item{type_: "feat", description: "A new feature"},
+		item{commitType: "feat", description: "A new feature"},
 	}
 	model.list.SetItems(items)
 	model.list.Select(0)
@@ -270,7 +271,7 @@ func TestItemListDelegate(t *testing.T) {
 
 func TestItemMethods(t *testing.T) {
 	testItem := item{
-		type_:       "feat",
+		commitType:  "feat",
 		description: "A new feature",
 	}
 

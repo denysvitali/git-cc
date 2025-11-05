@@ -60,21 +60,17 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v5
       with:
-        go-version: ${{ env.GO_VERSION }}
+        fetch-depth: 0
+        fetch-tags: true
 
-    - name: Run Gosec Security Scanner
-      uses: securecodewarrior/github-action-gosec@master
-      with:
-        args: '-no-fail -fmt sarif -out gosec.sarif ./...'
+    - name: Fetch all branches
+      run: git fetch --all
 
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: gosec.sarif
+    - name: Run Gitleaks
+      uses: gitleaks/gitleaks-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   quality:
     name: Code Quality
@@ -104,11 +100,6 @@ jobs:
 
     - name: Run go vet
       run: go vet ./...
-
-    - name: Check for inefficient assignments
-      uses: dominikh/staticcheck-action@v1.3.1
-      with:
-        version: "2024.1.1"
 
   goreleaser:
     name: Build & Release

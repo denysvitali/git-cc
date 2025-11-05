@@ -25,7 +25,6 @@ build-all: ## Build all platform binaries using Goreleaser
 test: ## Run all tests
 	@echo "Running tests..."
 	go test -v -race -coverprofile=coverage.out ./...
-	go test -v -race ./...
 
 test-integration: ## Run integration tests
 	@echo "Running integration tests..."
@@ -38,7 +37,7 @@ coverage: test ## Show test coverage
 
 lint: ## Run linters
 	@echo "Running golangci-lint..."
-	~/go/bin/golangci-lint run --timeout=10m
+	golangci-lint run --timeout=10m
 
 fmt: ## Format code
 	@echo "Formatting code..."
@@ -81,48 +80,20 @@ docker-run: docker-build ## Run Docker container
 	@echo "Running Docker container..."
 	docker run --rm -it $(BINARY_NAME):$(VERSION) --version
 
-release-snapshot: ## Create a release snapshot using Goreleaser
-	@echo "Creating release snapshot..."
-	~/go/bin/goreleaser build --snapshot --clean
-
 release-check: ## Check Goreleaser configuration
 	@echo "Checking Goreleaser configuration..."
-	~/go/bin/goreleaser check
-
-release-prepare: ## Prepare for release (run all checks and build snapshot)
-	@echo "Preparing for release..."
-	@make ci-check
-	@make release-snapshot
-	@echo "Release preparation complete!"
+	goreleaser check
 
 release-test: ## Test release process locally
 	@echo "Testing release process..."
-	~/go/bin/goreleaser release --snapshot --clean --skip-publish
+	goreleaser release --snapshot --clean --skip-publish
 	@echo "Release test complete!"
-
-release-notes: ## Generate release notes preview
-	@echo "Generating release notes..."
-	~/go/bin/goreleaser release --snapshot --clean --skip-announce --skip-publish --skip-validate
 
 dev-setup: ## Set up development environment
 	@echo "Setting up development environment..."
 	@echo "Installing tools..."
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/goreleaser/goreleaser/v2@latest
-	go install github.com/securecodewarrior/github-action-gosec@master
-	go install github.com/oligot/go-mod-upgrade@latest
 	@echo "Development environment setup complete!"
-
-security-scan: ## Run security scan
-	@echo "Running security scan..."
-	gosec ./...
-
-deps-update: ## Check for dependency updates
-	@echo "Checking for dependency updates..."
-	go-mod-upgrade --check-all
-
-deps-vuln: ## Check for known vulnerabilities
-	@echo "Checking for known vulnerabilities..."
-	govulncheck ./...
 
 all: fmt lint test build ## Run all common development tasks

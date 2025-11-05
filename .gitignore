@@ -24,7 +24,6 @@ go.work.sum
 .vscode/
 *.swp
 *.swo
-*~
 
 # OS generated files
 .DS_Store
@@ -57,23 +56,6 @@ coverage.html
 # Log files
 *.log
 
-# Claude AI specific files
-.claude/
-
-# Goreleaser artifacts
-dist/
-goreleaser/
-
-# Docker build cache
-.dockerignore
-Dockerfile.goreleaser
-
-# Make temporary files
-.make.*
-
-# Go module cache
-go.sum
-
 # Security scanning results
 gosec.sarif
 gosec.json
@@ -81,17 +63,8 @@ gosec.json
 # Linting cache
 .cache/
 
-# Snap files
-*.snap
-
 # Test artifacts
 testdata/temp/
-
-# Homebrew formula temp
-homebrew/*.rb.tmp
-
-# Scoop bucket temp
-scoop/bucket/*.json.tmp
 
 # Release artifacts (will be generated and uploaded)
 *.tar.gz
@@ -111,7 +84,3 @@ Makefile.local
 auto-save-list
 tramp
 .\#*
-
-# Project-specific
-VERSION
-RELEASE_NOTES.md

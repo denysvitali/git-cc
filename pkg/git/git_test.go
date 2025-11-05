@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/config"
 )
 
 func TestParseCommitError(t *testing.T) {
@@ -96,13 +95,16 @@ func TestCommitSuccess(t *testing.T) {
 		t.Fatalf("failed to init git repo: %v", err)
 	}
 
-	// Configure git user
-	_, err = repo.CreateRemote(&config.RemoteConfig{
-		Name: "origin",
-		URLs: []string{"https://github.com/test/test.git"},
-	})
+	// Configure git user using git commands
+	cfg, err := repo.Config()
 	if err != nil {
-		t.Fatalf("failed to create remote: %v", err)
+		t.Fatalf("failed to get config: %v", err)
+	}
+	cfg.User.Name = "Test User"
+	cfg.User.Email = "test@example.com"
+	err = repo.SetConfig(cfg)
+	if err != nil {
+		t.Fatalf("failed to set config: %v", err)
 	}
 
 	// Create and stage a file
@@ -134,23 +136,37 @@ func TestCommitNoChanges(t *testing.T) {
 	os.Chdir(tempDir)
 
 	// Initialize git repo
-	_, err := git.PlainInit(".", false)
+	repo, err := git.PlainInit(".", false)
 	if err != nil {
 		t.Fatalf("failed to init git repo: %v", err)
+	}
+
+	// Configure git user
+	cfg, err := repo.Config()
+	if err != nil {
+		t.Fatalf("failed to get config: %v", err)
+	}
+	cfg.User.Name = "Test User"
+	cfg.User.Email = "test@example.com"
+	err = repo.SetConfig(cfg)
+	if err != nil {
+		t.Fatalf("failed to set config: %v", err)
 	}
 
 	// Test commit with no changes
 	err = Commit("feat: test commit")
 	if err == nil {
 		t.Error("expected error for no changes")
+		return
 	}
 
 	commitErr, ok := err.(*CommitError)
 	if !ok {
-		t.Error("expected CommitError")
+		t.Errorf("expected CommitError, got %T: %v", err, err)
+		return
 	}
 
 	if commitErr.Type != ErrorTypeNoChanges {
-		t.Errorf("expected error type %v, got %v", ErrorTypeNoChanges, commitErr.Type)
+		t.Errorf("expected error type %v, got %v. Output: %q", ErrorTypeNoChanges, commitErr.Type, commitErr.Output)
 	}
 }
