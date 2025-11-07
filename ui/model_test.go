@@ -114,9 +114,10 @@ func TestModelUpdate_MessageInputEmpty(t *testing.T) {
 }
 
 func TestModelUpdate_Quit(t *testing.T) {
+	// Test when on Type selection step, 'q' should NOT quit
 	model := InitialModel()
 
-	// Test Ctrl+C returns a command
+	// Test Ctrl+C returns a command in all steps
 	keyMsg := tea.KeyMsg{Type: tea.KeyCtrlC}
 	_, cmd := model.Update(keyMsg)
 
@@ -124,12 +125,12 @@ func TestModelUpdate_Quit(t *testing.T) {
 		t.Error("Expected a command for Ctrl+C")
 	}
 
-	// Test 'q' key returns a command
+	// Test 'q' key does not quit (anywhere)
 	keyMsg = tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'q'}}
 	_, cmd = model.Update(keyMsg)
 
-	if cmd == nil {
-		t.Error("Expected a command for 'q' key")
+	if cmd != nil {
+		t.Error("Expected no command for 'q' key (should not quit)")
 	}
 }
 

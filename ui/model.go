@@ -144,8 +144,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q":
+		case "ctrl+c":
 			return m, tea.Quit
+
+		// Note: 'q' is intentionally NOT handled here
+		// - In StepTypeSelect: it will reach the list update below
+		// - In StepScope/StepMessage: textinput handles it before reaching here
+		// - We do NOT want 'q' to quit the application
 
 		case "enter":
 			switch m.step {
@@ -194,6 +199,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch m.step {
 	case StepTypeSelect:
+		// If it's a 'q' key press, just return nil to prevent list from quitting
+		// The list handles 'q' as a quit key by default, which we want to disable
+		if keyMsg, ok := msg.(tea.KeyMsg); ok && keyMsg.String() == "q" {
+			return m, nil
+		}
 		m.list, cmd = m.list.Update(msg)
 		cmds = append(cmds, cmd)
 
@@ -238,7 +248,7 @@ func (m Model) View() string {
 				s += m.gitResult.Details + "\n\n"
 			}
 		}
-		s += promptStyle.Render("Press 'r' to retry or 'q' to quit")
+		s += promptStyle.Render("Press 'r' to retry or Ctrl+C to quit")
 	}
 
 	return appStyle.Render(s)
